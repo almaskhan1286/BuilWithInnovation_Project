@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import Products from "./Products";
 import FilterProducts from "./FilterProducts";
 import Header from "../Header/Header";
@@ -19,20 +20,6 @@ const Home = () => {
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
-  useEffect(() => {
-    const userId = getCurrentUserId();
-    fetch(`https://dummyjson.com/carts/user/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCart(data.products || []);
-      })
-      .catch((error) => console.error("Error fetching cart items:", error));
-  }, []);
-
-  const getCurrentUserId = () => {
-    return 1;
-  };
-
   const onPriceRangeChange = (price) => {
     if (price === "") {
       setFilteredProducts(products);
@@ -48,11 +35,11 @@ const Home = () => {
     const newFilteredProducts = products.filter((product) =>
       product.title.toLowerCase().includes(query.toLowerCase())
     );
-
     setFilteredProducts(newFilteredProducts);
   };
 
   const addToCart = (product) => {
+    console.log("Adding to Cart:", product);
     setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
   };
 
@@ -65,8 +52,15 @@ const Home = () => {
         </div>
       </div>
       <div>
-        <Products products={filteredProducts} addToCart={addToCart} />
-        <CartProducts cartItems={cart} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Products products={filteredProducts} addToCart={addToCart} />
+            }
+          />
+          <Route path="/cart" element={<CartProducts cartItems={cart} />} />
+        </Routes>
       </div>
     </>
   );

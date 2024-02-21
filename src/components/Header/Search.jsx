@@ -27,9 +27,7 @@ const Search = ({ products }) => {
   };
 
   return (
-    <div 
-        className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
-    >
+    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <div className="flex justify-between items-center">
           <input
@@ -43,7 +41,6 @@ const Search = ({ products }) => {
           <MdClose className="text-gray-500 cursor-pointer" onClick={onClose} />
         </div>
         <div className="mt-4">
-          
           {searchResults.length === 0 && (
             <div className="text-gray-500 text-center">No results found.</div>
           )}

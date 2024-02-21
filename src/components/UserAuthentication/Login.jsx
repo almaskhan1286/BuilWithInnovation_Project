@@ -1,21 +1,14 @@
 import React, { useState } from "react";
-import { login } from "./userAuth";
-import { useNavigate } from "react-router-dom";
+import {  useAuth } from "./useAuth";
 
-const Login = () => {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    try {
-      await login(username, password);
+const Login = () => { 
 
-      navigate("/");
-    } catch (error) {
-      console.log("Login Failed:", error);
-    }
-  };
+const {login} = useAuth()
+
+const [username,setUsername] = useState('')
+const [password,setPassword] = useState('')
+
 
   return (
     <>
@@ -23,7 +16,7 @@ const Login = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-32 w-auto"
-            src="./src/assets/p-logo.png"
+            src="./public/p-logo.png"
             alt="Build With Innovation"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -87,9 +80,9 @@ const Login = () => {
               <button
                 type="button"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={handleLogin}
+                onClick={()=>login(username,password)}
               >
-                Go
+                Sign in
               </button>
             </div>
           </form>

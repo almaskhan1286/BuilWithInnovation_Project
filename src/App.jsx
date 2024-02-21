@@ -1,46 +1,33 @@
-import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/UserAuthentication/Login";
 import Home from "./components/Home/Home";
-import { isAuthenticated } from "./components/UserAuthentication/userAuth";
+import { useAuth } from "./components/UserAuthentication/useAuth";
 import Cart from "./components/CartProducts/CartProducts";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authenticated = await isAuthenticated();
-      setIsLoggedIn(authenticated);
-      setLoading(false);
-    };
-    checkAuth();
-  }, []);
-
-  if (loading) {
-    return <div>Please wait😊 You will get a better experience...</div>;
-  }
+  const { isAuthenticated } = useAuth();
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        {isLoggedIn ? (
-          <>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-          </>
-        ) : (
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        )}
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          isAuthenticated() ? <PrivateRoutes /> : <Navigate to="/login" />
+        }
+      />
+      <Route path="/cart" element={<Cart />} />
+    </Routes>
+  );
+};
+
+const PrivateRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 

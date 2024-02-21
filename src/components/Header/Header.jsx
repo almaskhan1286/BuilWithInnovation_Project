@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaOpencart } from "react-icons/fa";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { logout } from "../UserAuthentication/userAuth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../UserAuthentication/useAuth";
 
-const Header = ({ handleSearch, cartItems }) => {
-  const navigate = useNavigate();
+const Header = ({ handleSearch, cartItems = [] }) => {
   const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const goToPage = (path) => {
     navigate(path);
@@ -18,13 +19,11 @@ const Header = ({ handleSearch, cartItems }) => {
     handleSearch(value);
   };
 
+  const totalCartItems = cartItems ? cartItems.length : 0;
+
   const handleLogout = () => {
     logout();
-    navigate("/login");
   };
-
-  const totalCartItems =
-    cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   return (
     <header className="bg-gray-800 text-white py-2 px-1 md:py-1">
@@ -33,7 +32,7 @@ const Header = ({ handleSearch, cartItems }) => {
           className="cursor-pointer w-14 h-14 md:w-16 md:h-16 "
           onClick={() => goToPage("/")}
         >
-          <img src="./src/assets/p-logo.png" alt="Buil With Innovation" />
+          <img src="./src/assets/p-logo.png" alt="Build With Innovation" />
         </span>
 
         <div className="relative flex items-center justify-center flex-grow">
